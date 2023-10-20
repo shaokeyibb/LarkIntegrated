@@ -16,14 +16,19 @@ import com.lark.oapi.service.im.v1.enums.CreateMessageReceiveIdTypeEnum
 import com.lark.oapi.service.im.v1.model.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.*
+import java.util.concurrent.Executors
 
 val cachedEventDispatcher: MutableMap<String, EventDispatcher> = mutableMapOf()
 val larkServletAdapter = ServletAdapter()
 
+private val executor = Executors.newSingleThreadExecutor()
+
 fun EventDispatcher.Builder.buildEventDispatcher(botName: String): EventDispatcher {
     return this.onP2MessageReceiveV1(object : ImService.P2MessageReceiveV1Handler() {
         override fun handle(event: P2MessageReceiveV1) {
-            event.handleMessageSync(botName)
+            executor.submit {
+                event.handleMessageSync(botName)
+            }
         }
     }).build()
 }
