@@ -107,7 +107,8 @@ fun EventMessage.withSender(
             .userIdType(GetUserUserIdTypeEnum.USER_ID)
             .build()
     )?.data?.user?.let { user ->
-        "${user.nickname}(${user.name})"
+        if (user.nickname != null) "${user.nickname}(${user.name})"
+        else user.name
     } ?: senderUserID
 
     val group = client?.im()?.chat()?.get(
