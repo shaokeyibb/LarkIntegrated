@@ -67,8 +67,7 @@ fun P2MessageReceiveV1.handleMessageSync(botName: String) {
                                         JsonObject(
                                             mapOf(
                                                 "msg_type" to JsonPrimitive("post"),
-                                                "content" to JsonObject(
-                                                    mapOf(
+                                                "content" to JsonObject(mapOf(
                                                         "post" to Json.decodeFromString<JsonObject>(
                                                             message.withSender(
                                                                 cachedClients[botName],
@@ -125,18 +124,10 @@ fun EventMessage.withSender(
                         "title" to JsonPrimitive("$sender 在 $group 的聊天记录"),
                         "content" to JsonArray(contentJson["content"]?.jsonArray?.toMutableList()?.also { list ->
                             contentJson["title"]?.jsonPrimitive?.content?.takeIf { it.isNotBlank() }?.let {
-                                list.add(
-                                    0,
-                                    JsonArray(
-                                        listOf(
-                                            JsonObject(
-                                                mapOf(
+                                list.add(0, JsonArray(listOf(
+                                    JsonObject(mapOf(
                                                     "tag" to JsonPrimitive("text"),
-                                                    "text" to JsonPrimitive("原标题：${it}")
-                                                )
-                                            )
-                                        )
-                                    )
+                                                    "text" to JsonPrimitive("原标题：${it}")))))
                                 )
                             }
                         }?.let { list ->
@@ -161,10 +152,8 @@ fun EventMessage.withSender(
                 JsonObject(
                     mapOf(
                         "title" to JsonPrimitive("$sender 在 $group 的聊天记录"),
-                        "content" to JsonArray(
-                            listOf(
-                                JsonArray(
-                                    listOf(
+                        "content" to JsonArray(listOf(
+                            JsonArray(listOf(
                                         JsonObject(contentJson.toMutableMap().apply {
                                             put("tag", JsonPrimitive(messageType))
                                         })
@@ -182,12 +171,9 @@ fun EventMessage.withSender(
                 JsonObject(
                     mapOf(
                         "title" to JsonPrimitive("$sender 在 $group 的聊天记录"),
-                        "content" to JsonArray(
-                            listOf(
-                                JsonArray(
-                                    listOf(
-                                        JsonObject(
-                                            mapOf(
+                        "content" to JsonArray(listOf(
+                                JsonArray(listOf(
+                                        JsonObject(mapOf(
                                                 "tag" to JsonPrimitive("text"),
                                                 "text" to JsonPrimitive("[$messageType 消息] 升级至最新版手机飞书也看不了")
                                             )
